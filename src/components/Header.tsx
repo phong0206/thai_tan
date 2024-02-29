@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -18,9 +19,18 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Collapse from '@mui/material/Collapse';
+import { makeStyles, createStyles } from '@mui/styles';
 
 const drawerWidth = 240;
-function Unit({ nameButton, open, handleClick }: any) {
+
+interface Props {
+  nameButton?: string;
+  open?: boolean;
+  handleClick?: Function;
+  units?: Array<string>;
+  windowWidth?: number;
+}
+function Unit({ nameButton = '', open = false, handleClick, units }: Props) {
   return (
     <React.Fragment key={1}>
       <ListItem disablePadding>
@@ -31,51 +41,137 @@ function Unit({ nameButton, open, handleClick }: any) {
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
-          <ListItemButton sx={{ pl: 4 }}>
-            <ListItemText primary="Starred" />
-          </ListItemButton>
+          {units &&
+            units.map((item: string, index: number) => (
+              <ListItemButton sx={{ pl: 4 }} key={index}>
+                <ListItemText primary={item} />
+              </ListItemButton>
+            ))}
         </List>
       </Collapse>
     </React.Fragment>
   );
 }
 
-function TooltipHeader({ nameButton, handleClick }: any) {
+const useStyles = makeStyles((theme: any) =>
+  createStyles({
+    buttonTooltip: {
+      color: '#fff',
+      marginLeft: '10px',
+    },
+    boxTooltip: {
+      [theme.breakpoints.down('lg')]: {
+        display: 'none',
+      },
+      [theme.breakpoints.up('lg')]: {
+        display: 'block',
+        marginLeft: 'auto',
+      },
+    },
+    typographyTooltip: {
+      cursor: 'pointer',
+      fontSize: '18px',
+      fontWeight: 'bold',
+    },
+    boxDrawer: {
+      marginRight: 1,
+      height: '8vh',
+    },
+    boxContainerDrawer: { textAlign: 'center' },
+    appbar: { backgroundColor: '#052c43' },
+    iconButton: {
+      marginRight: theme.spacing(2),
+      [theme.breakpoints.up('lg')]: {
+        display: 'none',
+      },
+    },
+    toolbarItems: {
+      [theme.breakpoints.down('xs')]: {
+        display: 'none',
+      },
+      [theme.breakpoints.up('sm')]: {
+        marginLeft: 'auto',
+      },
+    },
+    boxHeader: {
+      display: 'flex',
+      marginTop: '100px',
+      [theme.breakpoints.down('sm')]: {
+        // 600px
+        marginTop: '80px',
+      },
+    },
+    toolbarHeader: {
+      marginInline: '12vh',
+      [theme.breakpoints.down('lg')]: {
+        // 1280px
+        marginInline: '1.5vw',
+      },
+      [theme.breakpoints.down('md')]: {
+        // 960px
+        marginInline: '2vw',
+      },
+      [theme.breakpoints.down('sm')]: {
+        // 600px
+        marginInline: '0px',
+      },
+    },
+    boxImage: {
+      marginRight: 1,
+      height: '11vh',
+      [theme.breakpoints.down('sm')]: {
+        // 600px
+        height: '8vh',
+      },
+    },
+    drawer: {
+      [theme.breakpoints.down('xs')]: {
+        display: 'block',
+      },
+      [theme.breakpoints.up('lg')]: {
+        display: 'none',
+      },
+      '& .MuiDrawer-paper': {
+        boxSizing: 'border-box',
+        width: drawerWidth,
+      },
+    },
+  })
+);
+
+function TooltipHeader({ nameButton, units }: Props) {
+  const classes = useStyles();
   return (
-    <Button sx={{ color: '#fff', marginLeft: '10px' }}>
+    <Button className={classes.buttonTooltip}>
       <Tooltip
+        interactive
         title={
-          <List>
-            <ListItem button>
-              <ListItemText primary="Danh mục 1" />
-            </ListItem>
-            <ListItem button>
-              <ListItemText primary="Danh mục 2" />
-            </ListItem>
-            <ListItem button>
-              <ListItemText primary="Danh mục 3" />
-            </ListItem>
+          <List
+            sx={{
+              backgroundColor: '#ff0000',
+              color: '#ffffff',
+              fontWeight: 'bold',
+            }}
+          >
+            {units?.map((item: string, index: number) => (
+              <ListItem button key={index}>
+                <ListItemText primary={item} />
+              </ListItem>
+            ))}
           </List>
         }
-        interactive
       >
-        <Typography
-          component="div"
-          sx={{ cursor: 'pointer', fontSize: '18px', fontWeight: 'bold' }}
-        >
+        <Typography component="div" className={classes.typographyTooltip}>
           {nameButton}
         </Typography>
       </Tooltip>
     </Button>
   );
 }
-export default function Header({ windowWidth }: any) {
+
+export default function Header({ windowWidth }: Props) {
+  const classes = useStyles();
+
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [open1, setOpen1] = React.useState(true);
   const [open2, setOpen2] = React.useState(true);
@@ -99,57 +195,102 @@ export default function Header({ windowWidth }: any) {
   };
 
   const drawer = (
-    <Box sx={{ textAlign: 'center' }}>
-      <Box
-        component="img"
-        src="../../public/snapedit_1708352731187.png"
-        alt="Logo"
-        sx={{ marginRight: 1, height: '8vh' }}
-      />
+    <Box className={classes.boxContainerDrawer}>
+      <a href="">
+        <Box
+          component="img"
+          src="../../public/snapedit_1708352731187.png"
+          alt="Logo"
+          className={classes.boxDrawer}
+        />
+      </a>
       <Divider />
       <List>
-        <Unit open={open1} handleClick={handleClick1} nameButton="Trang Chủ" />
-        <Unit open={open2} handleClick={handleClick2} nameButton="Unit1" />
-        <Unit open={open3} handleClick={handleClick3} nameButton="Unit2" />
+        <Unit
+          open={open1}
+          handleClick={handleClick1}
+          nameButton="Tư vấn doanh nghiệp"
+          units={[
+            'Thành lập doanh nghiệp',
+            'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
+          ]}
+        />
+        <Unit
+          open={open2}
+          handleClick={handleClick2}
+          nameButton="Unit1"
+          units={[
+            'Thành lập doanh nghiệp',
+            'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
+          ]}
+        />
+        <Unit
+          open={open3}
+          handleClick={handleClick3}
+          nameButton="Unit2"
+          units={[
+            'Thành lập doanh nghiệp',
+            'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
+          ]}
+        />
       </List>
     </Box>
   );
 
   return (
-    <Box
-      sx={{ display: 'flex', marginTop: windowWidth > 600 ? '100px' : '70px' }}
-    >
+    <Box className={classes.boxHeader}>
       <CssBaseline />
-      <AppBar component="nav" sx={{ backgroundColor: '#052c43' }}>
-        <Toolbar sx={{ marginInline: windowWidth > 600 ? '12vh' : 0 }}>
+      <AppBar component="nav" className={classes.appbar}>
+        <Toolbar className={classes.toolbarHeader}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
             edge="start"
             onClick={handleDrawerToggle}
-            sx={{ mr: 2, display: { sm: 'none' } }}
+            className={classes.iconButton}
           >
             <MenuIcon />
           </IconButton>
           <Button>
-            <Box
-              component="img"
-              src="../../public/snapedit_1708352731187.png"
-              alt="Logo"
-              sx={{
-                marginRight: 1,
-                height: windowWidth >= 600 ? '11vh' : '7vh',
-              }}
-            />
+            <a href="">
+              <Box
+                component="img"
+                src="../../public/snapedit_1708352731187.png"
+                alt="Logo"
+                className={classes.boxImage}
+              />
+            </a>
           </Button>
 
-          <Box
-            sx={{ display: { xs: 'none', sm: 'block' }, marginLeft: 'auto' }}
-          >
-            <TooltipHeader nameButton="Trang Chủ" />
-            <TooltipHeader nameButton="Unit1" />
-            <TooltipHeader nameButton="Unit2" />
-            <TooltipHeader nameButton="Unit3" />
+          <Box className={classes.boxTooltip}>
+            <TooltipHeader
+              nameButton="Trang Chủ"
+              units={[
+                'Thành lập doanh nghiệp',
+                'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
+              ]}
+            />
+            <TooltipHeader
+              nameButton="Unit1"
+              units={[
+                'Thành lập doanh nghiệp',
+                'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
+              ]}
+            />
+            <TooltipHeader
+              nameButton="Unit2"
+              units={[
+                'Thành lập doanh nghiệp',
+                'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
+              ]}
+            />
+            <TooltipHeader
+              nameButton="Unit3"
+              units={[
+                'Thành lập doanh nghiệp',
+                'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
+              ]}
+            />
           </Box>
         </Toolbar>
       </AppBar>
@@ -161,13 +302,7 @@ export default function Header({ windowWidth }: any) {
           ModalProps={{
             keepMounted: true, // Better open performance on mobile.
           }}
-          sx={{
-            display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': {
-              boxSizing: 'border-box',
-              width: drawerWidth,
-            },
-          }}
+          className={classes.drawer}
         >
           {drawer}
         </Drawer>
