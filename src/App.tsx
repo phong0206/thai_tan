@@ -18,8 +18,9 @@ function App() {
   const Login = lazy(() => import('./pages/Login'));
   const Post = lazy(() => import('./pages/Post'));
   const DetailBlog = lazy(() => import('./pages/DetailBlog'));
-  const theme = createTheme();
+  const DeleteBlog = lazy(() => import('./pages/DeleteBlog'));
 
+  const theme = createTheme();
 
   return (
     <AuthProvider>
@@ -45,6 +46,14 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <Post />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/delete"
+                  element={
+                    <ProtectedRoute>
+                      <DeleteBlog />
                     </ProtectedRoute>
                   }
                 />

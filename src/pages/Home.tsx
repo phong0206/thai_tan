@@ -64,27 +64,27 @@ export function ButtonContact() {
 function Home() {
   const [repoCategories, setRepoCategories] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-   React.useEffect(() => {
-     const fetchUnitsByCategory = async () => {
-       try {
-         const data = await api.getAllCategories();
-         if (data.status === 200) {
-           setRepoCategories(data.data.data.categories);
-         } else {
-           setIsLoading(true);
-         }
-       } catch (error) {
-         console.error('Error fetching units by category', error);
-       } finally {
-         setIsLoading(false);
-       }
-     };
+  React.useEffect(() => {
+    const fetchUnitsByCategory = async () => {
+      try {
+        const data = await api.getAllCategories();
+        if (data.status === 200) {
+          setRepoCategories(data.data.data.categories);
+        } else {
+          setIsLoading(true);
+        }
+      } catch (error) {
+        console.error('Error fetching units by category', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-     fetchUnitsByCategory();
-   }, []);
-   if (isLoading) {
-     return <div>Loading...</div>;
-   }
+    fetchUnitsByCategory();
+  }, []);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="App">
       <Header />
@@ -95,10 +95,7 @@ function Home() {
           categoryName={item.category}
           categoryId={item._id}
         />
-      ))}{' '}
-      {/* <Slider categoryName="Đầu tư nước ngoài" />
-      <Slider categoryName="Giấy phép con" />
-      <Slider categoryName="Giấy phép lao động, Visa" /> */}
+      ))}
       <ScrollTopButton />
       <ButtonContact />
       <Footer />

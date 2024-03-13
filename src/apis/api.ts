@@ -13,7 +13,8 @@ interface Props {
   file?: File,
   image?: string,
   content?: string,
-  title?: string
+  title?: string,
+  blogId?: string
 }
 export const api = axios.create({
   baseURL: API_URL,
@@ -196,6 +197,32 @@ export const getBlogByCategoryId = async (categoryId: Props) => {
         withCredentials: true,
       }
     );
+    return res.data;
+  } catch (e) {
+    return { error: 'server_error' };
+  }
+};
+
+export const getBlogByUnitId = async (unitId: Props) => {
+  try {
+    const res = await api.post(
+      '/blog/auth/get-all-blogs-by-unitid',
+      {
+        unitId
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (e) {
+    return { error: 'server_error' };
+  }
+};
+
+export const deleteBlog = async (blogId: string) => {
+  try {
+    const res = await apiProtected.delete(`/blog/auth/delete-blog/${blogId}`);
     return res.data;
   } catch (e) {
     return { error: 'server_error' };

@@ -53,6 +53,10 @@ const useStyles = makeStyles((theme: any) =>
       marginLeft: '10px',
       padding: '6px 16px !important',
       backgroundColor: 'chocolate',
+      [theme.breakpoints.down('sm')]: {
+        marginTop: '10px',
+        marginLeft: '0px',
+      },
       '&:hover': {
         backgroundColor: 'red !important',
       },
@@ -68,14 +72,16 @@ const Post = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [repoCategories, setRepoCategories] = React.useState([]);
-  const [repoUnits, setRepoUnits] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
+
+  const [repoCategories, setRepoCategories] = React.useState([]);
   const [category, setCategory] = React.useState('');
+
+  const [repoUnits, setRepoUnits] = React.useState([]);
   const [unit, setUnit] = React.useState('');
-  const [file, setFile] = React.useState<File | null>(null);
-  const [title, setTitle] = React.useState('');
-  const [content, setContent] = React.useState('');
+
+  const [repoBlogs, setRepoBlogs] = React.useState([]);
+  const [blog, setBlog] = React.useState('');
 
   React.useEffect(() => {
     const fetchUnitsByCategory = async () => {
@@ -99,9 +105,7 @@ const Post = () => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  const handleDeleteButton = () => {
-    navigate('/admin/delete');
-  };
+
   const handleChangeCategory = async (
     event: ChangeEvent<{ value: unknown }>
   ) => {
@@ -120,34 +124,32 @@ const Post = () => {
       setIsLoading(false);
     }
   };
-
-  const handleChangeUnit = (event: ChangeEvent<{ value: unknown }>) => {
+  const handleChangeUnit = async (event: ChangeEvent<{ value: unknown }>) => {
     const selectedUnitId = event.target.value as string;
     setUnit(selectedUnitId);
-  };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files.length > 0) {
-      setFile(event.target.files[0]);
-    }
-  };
-
-  const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
-
-  const handleContentChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTimeout(() => {}, 3000);
-    setContent(event.target.value);
-  };
-
-  const uploadBlog = async () => {
-    if (!category || !unit || !file || !title || !content) {
-      console.error('Missing required information');
-      return;
-    }
     try {
-      const data = await api.uploadBlog({ file, content, title, unit });
+      setIsLoading(true);
+      const data = await api.getBlogByUnitId(selectedUnitId);
+      console.log(111111, data.data);
+
+      if (data.status === 200) {
+        setRepoBlogs(data.data.blogsWithPathImages);
+      }
+    } catch (error) {
+      console.error('Error fetching blogs by category', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const handleChangeBlogs = (event: ChangeEvent<{ value: unknown }>) => {
+    const selectedBlogId = event.target.value as string;
+    setBlog(selectedBlogId);
+  };
+
+  const handleDeleteButton = async () => {
+    try {
+      const data = await api.deleteBlog(blog);
       console.log(123123123, data);
       if (data.status === 200) {
         enqueueSnackbar(data.message, {
@@ -170,10 +172,13 @@ const Post = () => {
       console.error('Error uploading blog', error);
     }
   };
+  const handlePostButton = () => {
+    navigate('/admin/post');
+  };
 
   return (
     <>
-      <h2 className={classes.h2}>Post Blog</h2>
+      <h2 className={classes.h2}>Delete Blog</h2>
       <Box className={classes.box}>
         <Select
           nameSelect="Category"
@@ -191,39 +196,26 @@ const Post = () => {
           displayField="unit"
           valueField="_id"
         />
-        <TextField
-          value={title}
-          onChange={handleTitleChange}
-          label="Title"
-          variant="outlined"
-          fullWidth
-        />
-        <InputFileUpload handleFileChange={handleFileChange} />
-        <TextField
-          value={content}
-          onChange={handleContentChange}
-          className={classes.content}
-          label="Content"
-          multiline
-          variant="outlined"
-          fullWidth
-          InputLabelProps={{
-            style: { lineHeight: '2.28' },
-          }}
+        <Select
+          nameSelect="Blog"
+          value={blog}
+          handleChange={handleChangeBlogs}
+          repo={repoBlogs}
+          displayField="title"
+          valueField="_id"
         />
         <span>
           <Button
             className={classes.sendAPI}
             variant="contained"
-            onClick={uploadBlog}
+            onClick={handlePostButton}
           >
-            Upload Blog
+            Back to Upload Blog
           </Button>
           <Button
             className={classes.deleteButton}
             variant="contained"
             onClick={handleDeleteButton}
-            
           >
             Delete Blog
           </Button>
