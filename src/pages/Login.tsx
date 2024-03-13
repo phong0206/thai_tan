@@ -15,7 +15,8 @@ import { useNavigate } from 'react-router-dom';
 import { makeStyles, createStyles } from '@mui/styles';
 import * as api from '../apis/api';
 import { useSnackbar } from 'notistack';
-import '../App.css'
+import '../App.css';
+import { AuthContext } from '../context/AuthProvider';
 
 function Copyright(props: any) {
   return (
@@ -88,6 +89,7 @@ const useStyles = makeStyles((theme: any) =>
 export default function Login() {
   const navigate = useNavigate();
   const classes = useStyles();
+  const { updateToken } = React.useContext(AuthContext);
   const { enqueueSnackbar } = useSnackbar();
   const formik = useFormik({
     initialValues: {
@@ -106,9 +108,7 @@ export default function Login() {
         email: values.email,
         password: values.password,
       });
-      console.log(res);
-
-      if (res.status === 200) {
+      if (res.data?.accessToken) {
         enqueueSnackbar(res.message, {
           variant: 'success',
           anchorOrigin: {
@@ -116,8 +116,8 @@ export default function Login() {
             horizontal: 'right',
           },
         });
-        localStorage.setItem('access_token', res.data.accessToken);
-        navigate('/home');
+        await updateToken(res.data.accessToken);
+        navigate('/admin/post');
       } else {
         enqueueSnackbar(res.message, {
           variant: 'error',

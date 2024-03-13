@@ -47,7 +47,7 @@ export default function Footer() {
             </Typography>
             <Typography variant="body1" color="text.secondary">
               <BusinessIcon fontSize="small" />
-              41 Chu Van An, Bac Ninh, Vietnam
+              39 BTT khu Đại Dương, Phường Đại Phúc
             </Typography>
             <Typography variant="body1" color="text.secondary">
               <EmailIcon fontSize="small" />
@@ -58,7 +58,7 @@ export default function Footer() {
               Phone: +84 37 474 9871
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={3}>
+          <Grid item xs={12} sm={4}>
             <Typography
               className={classes.header}
               color="text.primary"
@@ -67,25 +67,25 @@ export default function Footer() {
               Dịch Vụ Nổi Bật
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              <a href="">Giấy phép trang thiết bị y tế</a>
+              <a href="">Giấy chứng nhận đăng ký kinh doanh</a>
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              <a href="">Tư vấn doanh nghiệp</a>
+              <a href="">Giấy chứng nhận đăng ký đầu tư</a>
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              <a href="">Giấy phép phòng khám</a>
+              <a href="">Giấy phép lao động</a>
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              <a href="">Sở hữu trí tuệ</a>
+              <a href="">Visa, thẻ tạm trú</a>
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              <a href="">Dịch vụ khác</a>
+              <a href="">Giấy phép con khác</a>
             </Typography>
             <Typography variant="body1" color="text.secondary">
-              <a href="">Tư vấn</a>
+              <a href="">Dịch vụ tư vấn</a>
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={4}>
+          <Grid item xs={12} sm={3}>
             <Typography
               className={classes.header}
               color="text.primary"
@@ -113,6 +113,7 @@ export default function Footer() {
             {'Copyright © '}
             <Link color="inherit" href="https://your-website.com/">
               Your Website
+
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}

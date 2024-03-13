@@ -11,25 +11,25 @@ interface Props {
 const useStyles = makeStyles((theme: any) =>
   createStyles({
     button: {
-      position: 'fixed',
+      position: 'fixed !important',
       zIndex: 1000,
       width: 1,
       height: 53,
-      borderRadius: 50,
-      padding: '5px',
-      minWidth: '55px',
+      borderRadius: '50px !important',
+      padding: '5px !important',
+      minWidth: '55px !important',
       left: 20,
       [theme.breakpoints.down('lg')]: {
         // 1280px
-        left: 40,
+        left: '40px !important',
       },
       [theme.breakpoints.down('md')]: {
         // 960px
-        left: 30,
+        left: '30px !important',
       },
       [theme.breakpoints.down('sm')]: {
         // 600px
-        left: 5,
+        left: '5px !important',
       },
     },
   })

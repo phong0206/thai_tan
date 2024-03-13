@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable react/destructuring-assignment */
 import * as React from 'react';
 import Card from '@mui/material/Card';
@@ -6,7 +7,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import '../App.css';
+import '../../App.css';
+import { API_URL } from '../../utils/config';
 
 interface Props {
   endpoint: string;
@@ -24,11 +26,19 @@ export default function CardSlider(props: Props) {
     return str;
   };
   const handleClick = () => {
-    // Handle click event to redirect to a different link
-    navigate(props.endpoint); // Replace '/your-link' with the link you want to redirect to
+    navigate(props.endpoint);
   };
   return (
-    <Card sx={{ maxWidth: 300 }}>
+    <Card
+      sx={{
+        borderRadius: '10px',
+        maxWidth: 300,
+        '&:hover img': {
+          transform: 'scale(1.2)', // Scale up 10%
+          transition: 'transform 0.3s ease', // Smooth transition
+        },
+      }}
+    >
       <CardActionArea onClick={handleClick} component="div">
         <CardMedia
           component="img"
@@ -37,10 +47,19 @@ export default function CardSlider(props: Props) {
           alt="green iguana"
         />
         <CardContent>
-          <Typography gutterBottom variant="h6" component="div">
+          <Typography
+            gutterBottom
+            variant="h6"
+            component="div"
+            sx={{ fontFamily: 'Times New Roman, Times, serif' }}
+          >
             {shortenContent(props.title, 5)}
           </Typography>
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ fontFamily: 'Times New Roman, Times, serif' }}
+          >
             {props.content ? shortenContent(props.content, 30) : ''}
           </Typography>
         </CardContent>

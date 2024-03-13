@@ -1,35 +1,24 @@
+/* eslint-disable import/no-named-as-default */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable import/export */
 /* eslint-disable react/self-closing-comp */
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Slider from '../components/Slider';
-import Info from '../components/Info';
+import Header from '../components/Home/Header';
+import Footer from '../components/Home/Footer';
+import Slider from '../components/Home/Slider';
+import Info from '../components/Home/Info';
 import '../App.css';
-import * as React from 'react';
-import ScrollTopButton from '../components/ScrollTopButton';
-import ButtonInfo from '../components/ButtonInfo';
+import ScrollTopButton from '../components/Home/ScrollTopButton';
+import ButtonInfo from '../components/Home/ButtonInfo';
 import FacebookIcon from '@mui/icons-material/Facebook';
+import * as React from 'react';
+import * as api from '../apis/api';
 
-function Home() {
-  const [windowWidth, setWindowWidth] = React.useState(window.innerWidth);
-
-  React.useEffect(() => {
-    const handleResize = () => {
-      setWindowWidth(window.innerWidth);
-    };
-    window.addEventListener('resize', handleResize);
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, [windowWidth]);
-
+export function ButtonContact() {
   return (
-    <div className="App">
-      <Header windowWidth={windowWidth} />
-      <Info windowWidth={windowWidth} />
-      <Slider windowWidth={windowWidth} Unit="PHÁP LÝ DÂN SỰ" />
-      <Slider windowWidth={windowWidth} Unit="PHÁP LÝ KINH TẾ" />
-      <Slider windowWidth={windowWidth} Unit="DỊCH VỤ" />
-      {windowWidth > 1100 ? <ScrollTopButton /> : <div></div>}
+    <>
       <ButtonInfo
         bottom={50}
         Icon={
@@ -38,7 +27,7 @@ function Home() {
               id="draggableBtn"
               className="pulse-btn"
               src="https://vtlf.vn/wp-content/plugins/button-contact-vr/img/phone.png"
-              alt="Zalo"
+              alt="phone"
               width={30}
               height={30}
             />
@@ -57,7 +46,61 @@ function Home() {
           />
         }
       />
+      <ButtonInfo
+        bottom={260}
+        Icon={
+          <img
+            src="../../public/image-removebg-preview.png"
+            alt="Wechat"
+            width={40}
+            height={40}
+          />
+        }
+      />
+    </>
+  );
+}
 
+function Home() {
+  const [repoCategories, setRepoCategories] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+   React.useEffect(() => {
+     const fetchUnitsByCategory = async () => {
+       try {
+         const data = await api.getAllCategories();
+         if (data.status === 200) {
+           setRepoCategories(data.data.data.categories);
+         } else {
+           setIsLoading(true);
+         }
+       } catch (error) {
+         console.error('Error fetching units by category', error);
+       } finally {
+         setIsLoading(false);
+       }
+     };
+
+     fetchUnitsByCategory();
+   }, []);
+   if (isLoading) {
+     return <div>Loading...</div>;
+   }
+  return (
+    <div className="App">
+      <Header />
+      <Info />
+      {repoCategories.map((item: { _id: string; category: string }) => (
+        <Slider
+          key={item._id}
+          categoryName={item.category}
+          categoryId={item._id}
+        />
+      ))}{' '}
+      {/* <Slider categoryName="Đầu tư nước ngoài" />
+      <Slider categoryName="Giấy phép con" />
+      <Slider categoryName="Giấy phép lao động, Visa" /> */}
+      <ScrollTopButton />
+      <ButtonContact />
       <Footer />
     </div>
   );

@@ -1,25 +1,30 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable no-await-in-loop */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/ban-types */
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
-import Drawer from '@mui/material/Drawer';
-import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
-import { Tooltip } from '@mui/material';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ExpandLess from '@mui/icons-material/ExpandLess';
-import ExpandMore from '@mui/icons-material/ExpandMore';
-import Collapse from '@mui/material/Collapse';
+import React, { useState } from 'react';
+import {
+  AppBar,
+  Box,
+  Divider,
+  Drawer,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Toolbar,
+  Typography,
+  Button,
+  Tooltip,
+  Collapse,
+} from '@mui/material';
+import { Menu as MenuIcon, ExpandLess, ExpandMore } from '@mui/icons-material';
 import { makeStyles, createStyles } from '@mui/styles';
+import { listUnits } from '../../constants/common';
+import '../../App.css';
+import * as api from '../../apis/api';
 
 const drawerWidth = 240;
 
@@ -27,8 +32,7 @@ interface Props {
   nameButton?: string;
   open?: boolean;
   handleClick?: Function;
-  units?: Array<string>;
-  windowWidth?: number;
+  units?: Array<any>;
 }
 function Unit({ nameButton = '', open = false, handleClick, units }: Props) {
   return (
@@ -56,33 +60,38 @@ function Unit({ nameButton = '', open = false, handleClick, units }: Props) {
 const useStyles = makeStyles((theme: any) =>
   createStyles({
     buttonTooltip: {
-      color: '#fff',
-      marginLeft: '10px',
+      color: '#fff !important',
+      marginLeft: '10px !important',
     },
     boxTooltip: {
+      fontFamily: 'Times New Roman !important',
+
       [theme.breakpoints.down('lg')]: {
         display: 'none',
       },
       [theme.breakpoints.up('lg')]: {
-        display: 'block',
         marginLeft: 'auto',
       },
     },
     typographyTooltip: {
-      cursor: 'pointer',
-      fontSize: '18px',
-      fontWeight: 'bold',
+      cursor: 'pointer !important',
+      fontSize: '16px ',
+      fontWeight: 'bold !important',
+      fontFamily: 'Times New Roman !important',
+      '&:hover': {
+        color: 'yellow !important',
+      },
     },
     boxDrawer: {
       marginRight: 1,
-      height: '8vh',
+      height: '8vh ',
     },
     boxContainerDrawer: { textAlign: 'center' },
-    appbar: { backgroundColor: '#052c43' },
+    appbar: { backgroundColor: '#052c43 !important' },
     iconButton: {
       marginRight: theme.spacing(2),
       [theme.breakpoints.up('lg')]: {
-        display: 'none',
+        display: 'none !important',
       },
     },
     toolbarItems: {
@@ -95,14 +104,12 @@ const useStyles = makeStyles((theme: any) =>
     },
     boxHeader: {
       display: 'flex',
-      marginTop: '100px',
       [theme.breakpoints.down('sm')]: {
         // 600px
-        marginTop: '80px',
       },
     },
     toolbarHeader: {
-      marginInline: '12vh',
+      marginInline: '12vh ',
       [theme.breakpoints.down('lg')]: {
         // 1280px
         marginInline: '1.5vw',
@@ -119,15 +126,21 @@ const useStyles = makeStyles((theme: any) =>
     boxImage: {
       marginRight: 1,
       height: '11vh',
+      [theme.breakpoints.down('lg')]: {
+        // 1280px
+        height: '10.4vh',
+      },
+      [theme.breakpoints.down('md')]: {
+        // 960px
+        height: '10vh',
+      },
       [theme.breakpoints.down('sm')]: {
         // 600px
         height: '8vh',
       },
     },
     drawer: {
-      [theme.breakpoints.down('xs')]: {
-        display: 'block',
-      },
+      [theme.breakpoints.down('xs')]: {},
       [theme.breakpoints.up('lg')]: {
         display: 'none',
       },
@@ -135,6 +148,10 @@ const useStyles = makeStyles((theme: any) =>
         boxSizing: 'border-box',
         width: drawerWidth,
       },
+    },
+    tooltipList: {
+      fontWeight: 'bold !important',
+      fontFamily: 'Times New Roman ',
     },
   })
 );
@@ -144,15 +161,8 @@ function TooltipHeader({ nameButton, units }: Props) {
   return (
     <Button className={classes.buttonTooltip}>
       <Tooltip
-        interactive
         title={
-          <List
-            sx={{
-              backgroundColor: '#ff0000',
-              color: '#ffffff',
-              fontWeight: 'bold',
-            }}
-          >
+          <List className={classes.tooltipList}>
             {units?.map((item: string, index: number) => (
               <ListItem button key={index}>
                 <ListItemText primary={item} />
@@ -169,34 +179,52 @@ function TooltipHeader({ nameButton, units }: Props) {
   );
 }
 
-export default function Header({ windowWidth }: Props) {
+export default function Header() {
   const classes = useStyles();
 
-  const [mobileOpen, setMobileOpen] = React.useState(false);
-  const [open1, setOpen1] = React.useState(true);
-  const [open2, setOpen2] = React.useState(true);
-  const [open3, setOpen3] = React.useState(true);
+  const [repoCategories, setRepoCategories] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
 
-  const handleClick1 = () => {
-    setOpen1(!open1);
-  };
-  const handleClick2 = () => {
-    setOpen2(!open2);
-  };
-  const handleClick3 = () => {
-    setOpen3(!open3);
+  React.useEffect(() => {
+    const fetchUnitsByCategory = async () => {
+      try {
+        const data = await api.getUnitsAndCategory();
+        if (data.status === 200) {
+          setRepoCategories(data.data.units);
+        } else {
+          setIsLoading(true);
+        }
+      } catch (error) {
+        console.error('Error fetching units by category', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUnitsByCategory();
+  }, []);
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [openStates, setOpenStates] = React.useState(
+    new Array(listUnits.length).fill(false)
+  );
+
+  const handleUnitClick = (index: number) => {
+    const newOpenStates = [...openStates];
+    newOpenStates[index] = !newOpenStates[index];
+    setOpenStates(newOpenStates);
   };
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
-    setOpen1(false);
-    setOpen2(false);
-    setOpen3(false);
+    setOpenStates(new Array(listUnits.length).fill(false));
   };
 
   const drawer = (
     <Box className={classes.boxContainerDrawer}>
-      <a href="">
+      <a href="/">
         <Box
           component="img"
           src="../../public/snapedit_1708352731187.png"
@@ -206,40 +234,26 @@ export default function Header({ windowWidth }: Props) {
       </a>
       <Divider />
       <List>
-        <Unit
-          open={open1}
-          handleClick={handleClick1}
-          nameButton="Tư vấn doanh nghiệp"
-          units={[
-            'Thành lập doanh nghiệp',
-            'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
-          ]}
-        />
-        <Unit
-          open={open2}
-          handleClick={handleClick2}
-          nameButton="Unit1"
-          units={[
-            'Thành lập doanh nghiệp',
-            'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
-          ]}
-        />
-        <Unit
-          open={open3}
-          handleClick={handleClick3}
-          nameButton="Unit2"
-          units={[
-            'Thành lập doanh nghiệp',
-            'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
-          ]}
-        />
+        {repoCategories.map(
+          (
+            item: { units: Array<any>; category: string; categoryId: string },
+            index: number
+          ) => (
+            <Unit
+              key={item.categoryId}
+              open={openStates[index]}
+              handleClick={() => handleUnitClick(index)}
+              nameButton={item.category}
+              units={item.units}
+            />
+          )
+        )}
       </List>
     </Box>
   );
 
   return (
     <Box className={classes.boxHeader}>
-      <CssBaseline />
       <AppBar component="nav" className={classes.appbar}>
         <Toolbar className={classes.toolbarHeader}>
           <IconButton
@@ -263,34 +277,19 @@ export default function Header({ windowWidth }: Props) {
           </Button>
 
           <Box className={classes.boxTooltip}>
-            <TooltipHeader
-              nameButton="Trang Chủ"
-              units={[
-                'Thành lập doanh nghiệp',
-                'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
-              ]}
-            />
-            <TooltipHeader
-              nameButton="Unit1"
-              units={[
-                'Thành lập doanh nghiệp',
-                'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
-              ]}
-            />
-            <TooltipHeader
-              nameButton="Unit2"
-              units={[
-                'Thành lập doanh nghiệp',
-                'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
-              ]}
-            />
-            <TooltipHeader
-              nameButton="Unit3"
-              units={[
-                'Thành lập doanh nghiệp',
-                'Thành lập chi nhánh, văn phòng đại diện, địa điểm kinh doanh',
-              ]}
-            />
+            {repoCategories && repoCategories.length > 0 ? (
+              repoCategories.map(
+                (item: { category: string; units: any }, index: number) => (
+                  <TooltipHeader
+                    key={index}
+                    nameButton={item?.category}
+                    units={item?.units}
+                  />
+                )
+              )
+            ) : (
+              <div>Loading...</div>
+            )}
           </Box>
         </Toolbar>
       </AppBar>

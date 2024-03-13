@@ -44,9 +44,12 @@ module.exports = {
         'prefer-template': 0,
         'react/require-default-props': 0,
         'import/prefer-default-export': 0,
+        'react/function-component-definition':0,
         'import/extensions': 0,
         'react/display-name': 0,
         'import/newline-after-import': 0,
+        "react/jsx-no-useless-fragment": "error",
+        "import/no-duplicates": "error",
         'array-callback-return': 0,
         'consistent-return': 0,
         '@typescript-eslint/naming-convention': [
