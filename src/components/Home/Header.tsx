@@ -25,6 +25,7 @@ import { makeStyles, createStyles } from '@mui/styles';
 import { listUnits } from '../../constants/common';
 import '../../App.css';
 import * as api from '../../apis/api';
+import { useNavigate } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -33,30 +34,9 @@ interface Props {
   open?: boolean;
   handleClick?: Function;
   units?: Array<any>;
+  unitId?: string;
+  categoryId?: string;
 }
-function Unit({ nameButton = '', open = false, handleClick, units }: Props) {
-  return (
-    <React.Fragment key={1}>
-      <ListItem disablePadding>
-        <ListItemButton onClick={handleClick}>
-          <ListItemText primary={nameButton} />
-          {open ? <ExpandLess /> : <ExpandMore />}
-        </ListItemButton>
-      </ListItem>
-      <Collapse in={open} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
-          {units &&
-            units.map((item: string, index: number) => (
-              <ListItemButton sx={{ pl: 4 }} key={index}>
-                <ListItemText primary={item} />
-              </ListItemButton>
-            ))}
-        </List>
-      </Collapse>
-    </React.Fragment>
-  );
-}
-
 const useStyles = makeStyles((theme: any) =>
   createStyles({
     buttonTooltip: {
@@ -156,22 +136,84 @@ const useStyles = makeStyles((theme: any) =>
   })
 );
 
-function TooltipHeader({ nameButton, units }: Props) {
+function Unit({
+  nameButton = '',
+  open = false,
+  handleClick,
+  units,
+  categoryId,
+}: Props) {
+  const navigate = useNavigate();
+  const handleButtonUnitCategory = () => {
+    navigate(`/category/${categoryId}`);
+  };
+  const handleButtonTooltipUnit = (item: any) => {
+    navigate(`/unit/${item.unitId}`);
+  };
+  return (
+    <React.Fragment key={1}>
+      <ListItem disablePadding>
+        <ListItemButton>
+          <ListItemText
+            primary={nameButton}
+            onClick={handleButtonUnitCategory}
+          />
+          {open ? (
+            <ExpandLess onClick={handleClick} />
+          ) : (
+            <ExpandMore onClick={handleClick} />
+          )}
+        </ListItemButton>
+      </ListItem>
+      <Collapse in={open} timeout="auto" unmountOnExit>
+        <List component="div" disablePadding>
+          {units &&
+            units.map((item: { unit: string }, index: number) => (
+              <ListItemButton
+                sx={{ pl: 4 }}
+                key={index}
+                onClick={() => handleButtonTooltipUnit(item)}
+              >
+                <ListItemText primary={item.unit} />
+              </ListItemButton>
+            ))}
+        </List>
+      </Collapse>
+    </React.Fragment>
+  );
+}
+
+function TooltipHeader({ nameButton, units, categoryId }: Props) {
   const classes = useStyles();
+  const navigate = useNavigate();
+  const handleButtonTooltipCategory = () => {
+    navigate(`/category/${categoryId}`);
+  };
+  const handleButtonTooltipUnit = (item: any) => {
+    navigate(`/unit/${item.unitId}`);
+  };
+
   return (
     <Button className={classes.buttonTooltip}>
       <Tooltip
         title={
           <List className={classes.tooltipList}>
-            {units?.map((item: string, index: number) => (
-              <ListItem button key={index}>
-                <ListItemText primary={item} />
+            {units?.map((item: { unit: string }, index: number) => (
+              <ListItem
+                key={index}
+                onClick={() => handleButtonTooltipUnit(item)}
+              >
+                <ListItemText primary={item.unit} sx={{ cursor: 'pointer' }} />
               </ListItem>
             ))}
           </List>
         }
       >
-        <Typography component="div" className={classes.typographyTooltip}>
+        <Typography
+          component="div"
+          className={classes.typographyTooltip}
+          onClick={handleButtonTooltipCategory}
+        >
           {nameButton}
         </Typography>
       </Tooltip>
@@ -180,11 +222,15 @@ function TooltipHeader({ nameButton, units }: Props) {
 }
 
 export default function Header() {
+  const navigate = useNavigate();
+
   const classes = useStyles();
 
   const [repoCategories, setRepoCategories] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-
+  const handleClickHome = () => {
+    navigate('/');
+  };
   React.useEffect(() => {
     const fetchUnitsByCategory = async () => {
       try {
@@ -210,13 +256,11 @@ export default function Header() {
   const [openStates, setOpenStates] = React.useState(
     new Array(listUnits.length).fill(false)
   );
-
   const handleUnitClick = (index: number) => {
     const newOpenStates = [...openStates];
     newOpenStates[index] = !newOpenStates[index];
     setOpenStates(newOpenStates);
   };
-
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
     setOpenStates(new Array(listUnits.length).fill(false));
@@ -224,14 +268,13 @@ export default function Header() {
 
   const drawer = (
     <Box className={classes.boxContainerDrawer}>
-      <a href="/">
-        <Box
-          component="img"
-          src="../../public/snapedit_1708352731187.png"
-          alt="Logo"
-          className={classes.boxDrawer}
-        />
-      </a>
+      <Box
+        onClick={handleClickHome}
+        component="img"
+        src="../../public/snapedit_1708352731187.png"
+        alt="Logo"
+        className={classes.boxDrawer}
+      />
       <Divider />
       <List>
         {repoCategories.map(
@@ -245,6 +288,7 @@ export default function Header() {
               handleClick={() => handleUnitClick(index)}
               nameButton={item.category}
               units={item.units}
+              categoryId={item.categoryId}
             />
           )
         )}
@@ -266,24 +310,27 @@ export default function Header() {
             <MenuIcon />
           </IconButton>
           <Button>
-            <a href="">
-              <Box
-                component="img"
-                src="../../public/snapedit_1708352731187.png"
-                alt="Logo"
-                className={classes.boxImage}
-              />
-            </a>
+            <Box
+              onClick={handleClickHome}
+              component="img"
+              src="../../public/snapedit_1708352731187.png"
+              alt="Logo"
+              className={classes.boxImage}
+            />
           </Button>
 
           <Box className={classes.boxTooltip}>
             {repoCategories && repoCategories.length > 0 ? (
               repoCategories.map(
-                (item: { category: string; units: any }, index: number) => (
+                (
+                  item: { category: string; units: any; categoryId: string },
+                  index: number
+                ) => (
                   <TooltipHeader
                     key={index}
                     nameButton={item?.category}
                     units={item?.units}
+                    categoryId={item.categoryId}
                   />
                 )
               )

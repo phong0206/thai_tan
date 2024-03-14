@@ -130,8 +130,8 @@ const Post = () => {
 
     try {
       setIsLoading(true);
+
       const data = await api.getBlogByUnitId(selectedUnitId);
-      console.log(111111, data.data);
 
       if (data.status === 200) {
         setRepoBlogs(data.data.blogsWithPathImages);
@@ -150,7 +150,6 @@ const Post = () => {
   const handleDeleteButton = async () => {
     try {
       const data = await api.deleteBlog(blog);
-      console.log(123123123, data);
       if (data.status === 200) {
         enqueueSnackbar(data.message, {
           variant: 'success',

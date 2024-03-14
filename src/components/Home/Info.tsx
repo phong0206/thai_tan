@@ -14,31 +14,31 @@ const useStyles = makeStyles((theme: any) =>
       display: 'flex',
       alignItems: 'center',
       fontSize: '24px',
-      marginTop: '105px',
+      marginTop: '100px',
       [theme.breakpoints.down('lg')]: {
         // 1280px
-        marginTop: '120px',
-        paddingTop: '30px',
+        marginTop: '110px',
+        paddingTop: '25px',
 
         fontSize: '22px !important',
       },
       [theme.breakpoints.down('md')]: {
         // 900px
-        paddingTop: '8px',
-
-        marginTop: '115px',
+        paddingTop: '5px',
+        marginTop: '110px',
         fontSize: '16px !important',
       },
       [theme.breakpoints.down('sm')]: {
         // 600px
-        paddingTop: '8px',
-        marginTop: '70px',
+        paddingTop: '10px',
+        marginTop: '60px',
         height: '100px !important',
         fontSize: '14px !important',
         flexBasis: '100%',
       },
     },
     spanText: {
+      fontFamily: 'Times New Roman',
       color: 'white !important',
       marginLeft: '9rem !important',
       [theme.breakpoints.down('lg')]: {
@@ -72,7 +72,6 @@ export default function Info() {
       <Grid item xs={12} sm={6} className={classes.griditem}>
         <Text content="Hotline: 0326603593 - 0976333871" />
       </Grid>
-      
     </Grid>
   );
 }

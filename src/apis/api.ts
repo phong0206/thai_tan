@@ -152,7 +152,6 @@ export const uploadBlog = async ({ file, content, title, unit }) => {
     const res = await apiProtectedUploadFile.post('/blog/auth/create-blog', formData, {
       withCredentials: true,
     });
-    console.log('Response:', res);
     return res.data;
   } catch (e) {
     console.error('Error:', e);
@@ -160,14 +159,14 @@ export const uploadBlog = async ({ file, content, title, unit }) => {
   }
 };
 
-export const getAllBlogs = async () => {
-  try {
-    const res = await api.get('/blog/auth/get-all-blogs');
-    return res.data;
-  } catch (e) {
-    return { error: 'server_error' };
-  }
-};
+// export const getAllBlogs = async () => {
+//   try {
+//     const res = await api.get('/blog/auth/get-all-blogs');
+//     return res.data;
+//   } catch (e) {
+//     return { error: 'server_error' };
+//   }
+// };
 
 export const getDetailBlog = async (slug: string) => {
   try {
@@ -188,14 +187,8 @@ export const getDetailBlog = async (slug: string) => {
 
 export const getBlogByCategoryId = async (categoryId: Props) => {
   try {
-    const res = await api.post(
-      '/blog/auth/get-all-blogs-by-category',
-      {
-        categoryId
-      },
-      {
-        withCredentials: true,
-      }
+    const res = await api.get(
+      `/blog/auth/get-all-blogs-by-categoryid/${categoryId}`,
     );
     return res.data;
   } catch (e) {
@@ -205,14 +198,8 @@ export const getBlogByCategoryId = async (categoryId: Props) => {
 
 export const getBlogByUnitId = async (unitId: Props) => {
   try {
-    const res = await api.post(
-      '/blog/auth/get-all-blogs-by-unitid',
-      {
-        unitId
-      },
-      {
-        withCredentials: true,
-      }
+    const res = await api.get(
+      `/blog/auth/get-all-blogs-by-unitid/${unitId}`
     );
     return res.data;
   } catch (e) {

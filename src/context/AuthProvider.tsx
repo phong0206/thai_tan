@@ -42,7 +42,6 @@ const AuthProvider = React.memo((props: any) => {
       if (token) {
         api.setAccessToken(token);
         let res = await api.me();
-        console.log('ressss', res.data[0]);
         if (res.data) {
           setUser(res.data[0]);
         }

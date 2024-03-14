@@ -131,6 +131,7 @@ const Post = () => {
       setFile(event.target.files[0]);
     }
   };
+  console.log(1111, file);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
@@ -143,12 +144,18 @@ const Post = () => {
 
   const uploadBlog = async () => {
     if (!category || !unit || !file || !title || !content) {
+      enqueueSnackbar("Missing required information", {
+        variant: 'error',
+        anchorOrigin: {
+          vertical: 'top',
+          horizontal: 'right',
+        },
+      });
       console.error('Missing required information');
       return;
     }
     try {
       const data = await api.uploadBlog({ file, content, title, unit });
-      console.log(123123123, data);
       if (data.status === 200) {
         enqueueSnackbar(data.message, {
           variant: 'success',
@@ -198,7 +205,7 @@ const Post = () => {
           variant="outlined"
           fullWidth
         />
-        <InputFileUpload handleFileChange={handleFileChange} />
+        <InputFileUpload handleFileChange={handleFileChange} file={file} />
         <TextField
           value={content}
           onChange={handleContentChange}
@@ -223,7 +230,6 @@ const Post = () => {
             className={classes.deleteButton}
             variant="contained"
             onClick={handleDeleteButton}
-            
           >
             Delete Blog
           </Button>

@@ -46,7 +46,6 @@ export default function Slider({ categoryName, categoryId }: Props) {
     const fetchBlogsByUnit = async () => {
       try {
         const response = await api.getBlogByCategoryId(categoryId);
-        console.log(response.data.blogsWithPathImages);
         if (response.status === 200) {
           setSlide(response.data.blogsWithPathImages);
         }

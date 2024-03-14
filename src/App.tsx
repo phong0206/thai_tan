@@ -19,6 +19,7 @@ function App() {
   const Post = lazy(() => import('./pages/Post'));
   const DetailBlog = lazy(() => import('./pages/DetailBlog'));
   const DeleteBlog = lazy(() => import('./pages/DeleteBlog'));
+  const CardBlog = lazy(() => import('./pages/CardBlog'));
 
   const theme = createTheme();
 
@@ -58,6 +59,8 @@ function App() {
                   }
                 />
                 <Route path="/blog/:slug" element={<DetailBlog />} />
+                <Route path="/unit/:unitId" element={<CardBlog />} />
+                <Route path="/category/:categoryId" element={<CardBlog />} />
               </Routes>
             </Router>
           </SnackbarProvider>

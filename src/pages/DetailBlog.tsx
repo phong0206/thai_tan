@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme: any) =>
 function DetailBlog() {
   const classes = useStyles();
   let { slug } = useParams();
-
   const [blog, setBlog] = React.useState(null);
 
   React.useEffect(() => {
@@ -53,7 +52,6 @@ function DetailBlog() {
   if (!blog) {
     return <div>Loading...</div>;
   }
-  console.log(blog);
 
   return (
     <div className="App">
