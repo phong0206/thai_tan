@@ -12,6 +12,7 @@ import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import ProtectedRoute from './context/ProtectedRoute';
 import GuestRoute from './context/GuestRoute';
 import * as api from './apis/api';
+import UseMarkdown from './pages/UseMarkdown';
 
 function App() {
   const Home = lazy(() => import('./pages/Home'));
@@ -20,6 +21,7 @@ function App() {
   const DetailBlog = lazy(() => import('./pages/DetailBlog'));
   const DeleteBlog = lazy(() => import('./pages/DeleteBlog'));
   const CardBlog = lazy(() => import('./pages/CardBlog'));
+  const AddUnit = lazy(() => import('./pages/AddUnit'));
 
   const theme = createTheme();
 
@@ -55,6 +57,22 @@ function App() {
                   element={
                     <ProtectedRoute>
                       <DeleteBlog />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/add-unit-category"
+                  element={
+                    <ProtectedRoute>
+                      <AddUnit />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/admin/use-markdown"
+                  element={
+                    <ProtectedRoute>
+                      <UseMarkdown />
                     </ProtectedRoute>
                   }
                 />

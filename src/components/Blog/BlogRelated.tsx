@@ -8,7 +8,8 @@ import {
   Typography,
 } from '@mui/material';
 import { makeStyles, createStyles } from '@mui/styles';
-
+import * as api from '../../apis/api';
+import { APP_URL } from '../../utils/config';
 const useStyles = makeStyles((theme: any) =>
   createStyles({
     root: {
@@ -46,8 +47,31 @@ const useStyles = makeStyles((theme: any) =>
   })
 );
 
-const BlogRelated = () => {
+const BlogRelated = ({ blog }: any) => {
   const classes = useStyles();
+  const [title, setTitle] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  React.useEffect(() => {
+    const fetchBlogsByUnitId = async () => {
+      try {
+        const data = await api.getBlogByUnitId(blog.unitId);
+        if (data.status === 200) {
+          setTitle(data.data.blogsWithPathImages.slice(0, 10));
+        } else {
+          setIsLoading(true);
+        }
+      } catch (error) {
+        console.error('Error fetching units by category', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchBlogsByUnitId();
+  }, [blog]);
+  if (isLoading) {
+    return <div>Loading....</div>;
+  }
 
   return (
     <Table className={classes.root}>
@@ -61,19 +85,15 @@ const BlogRelated = () => {
         </TableRow>
       </TableHead>
       <TableBody>
-        {[
-          'Giấy chứng nhận đăng ký kinh doanh',
-          'Giấy chứng nhận đăng ký đầu tư',
-          'Giấy phép lao động',
-          'Visa, thẻ tạm trú',
-          'Giấy phép khác',
-          'Dịch vụ tư vấn',
-        ].map((service, index) => (
+        {title.map((service: { endpoint: string; title: string }, index) => (
           <TableRow key={index} className={classes.row}>
             <TableCell className={classes.cell}>
-              <a href="#" className={classes.link}>
+              <a
+                href={`${APP_URL}${service.endpoint}`}
+                className={classes.link}
+              >
                 <Typography className={classes.services}>
-                  • &ensp; {service}
+                  • &ensp; {service.title}
                 </Typography>
               </a>
             </TableCell>

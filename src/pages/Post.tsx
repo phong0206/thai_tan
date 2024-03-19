@@ -1,15 +1,18 @@
+/* eslint-disable import/no-duplicates */
 import React, { ChangeEvent } from 'react';
 import Select from '../components/PostBlog/Select';
 import '../App.css';
 import InputFileUpload from '../components/PostBlog/InputFileUpload';
 import * as api from '../apis/api';
-import { Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { makeStyles, createStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-
+import _ from 'lodash';
+import DialogCustom from '../components/DialogCustom';
+import ButtonsNavigate from '../components/PostBlog/ButtonsNavigate';
 const useStyles = makeStyles((theme: any) =>
   createStyles({
     box: {
@@ -39,7 +42,27 @@ const useStyles = makeStyles((theme: any) =>
       },
     },
     h2: {
-      marginTop: '20px',
+      textAlign: 'center',
+      fontFamily: 'Times New Roman, Times, serif',
+      color: '#333',
+      textTransform: 'uppercase',
+      letterSpacing: '2px',
+      marginBottom: '20px',
+      position: 'relative',
+      '&::before, &::after': {
+        content: '""',
+        position: 'absolute',
+        width: '40%',
+        height: '3px',
+        backgroundColor: '#1d5289',
+        bottom: '-5px',
+      },
+      '&::before': {
+        left: 0,
+      },
+      '&::after': {
+        right: 0,
+      },
     },
     sendAPI: {
       fontWeight: 'bold',
@@ -48,9 +71,24 @@ const useStyles = makeStyles((theme: any) =>
         backgroundColor: '#032887 !important',
       },
     },
-    deleteButton: {
+    deleteBlog: {
       fontWeight: 'bold',
-      marginLeft: '10px',
+      padding: '6px 16px !important',
+      backgroundColor: 'chocolate',
+      '&:hover': {
+        backgroundColor: 'red !important',
+      },
+    },
+    deleteUnit: {
+      fontWeight: 'bold',
+      padding: '6px 16px !important',
+      backgroundColor: 'chocolate',
+      '&:hover': {
+        backgroundColor: 'red !important',
+      },
+    },
+    deleteCategory: {
+      fontWeight: 'bold',
       padding: '6px 16px !important',
       backgroundColor: 'chocolate',
       '&:hover': {
@@ -60,6 +98,11 @@ const useStyles = makeStyles((theme: any) =>
     content: {
       maxHeight: '300px',
       overflowY: 'auto',
+    },
+    gridcontainer: {
+      [theme.breakpoints.up('lg')]: {
+        maxWidth: '75%',
+      },
     },
   })
 );
@@ -76,6 +119,8 @@ const Post = () => {
   const [file, setFile] = React.useState<File | null>(null);
   const [title, setTitle] = React.useState('');
   const [content, setContent] = React.useState('');
+  const [openUnit, setOpenUnit] = React.useState(false);
+  const [openCate, setOpenCate] = React.useState(false);
 
   React.useEffect(() => {
     const fetchUnitsByCategory = async () => {
@@ -96,9 +141,6 @@ const Post = () => {
     fetchUnitsByCategory();
   }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
   const handleDeleteButton = () => {
     navigate('/admin/delete');
   };
@@ -120,6 +162,9 @@ const Post = () => {
       setIsLoading(false);
     }
   };
+  if (isLoading) {
+    return <div>Loading....ádas</div>;
+  }
 
   const handleChangeUnit = (event: ChangeEvent<{ value: unknown }>) => {
     const selectedUnitId = event.target.value as string;
@@ -131,20 +176,88 @@ const Post = () => {
       setFile(event.target.files[0]);
     }
   };
-  console.log(1111, file);
 
   const handleTitleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
   const handleContentChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setTimeout(() => {}, 3000);
     setContent(event.target.value);
+  };
+
+  const handleDialogOpenUnit = () => {
+    setOpenUnit(true);
+  };
+
+  const handleDialogCloseUnit = () => {
+    setOpenUnit(false);
+  };
+
+  const handleDeleteUnit = async () => {
+    handleDialogCloseUnit();
+    // Thực hiện xóa ở đây hoặc truyền hàm xóa từ props
+    try {
+      const data = await api.deleteUnit(unit);
+      if (data.status === 200) {
+        enqueueSnackbar(data.message, {
+          variant: 'success',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+          },
+        });
+      } else {
+        enqueueSnackbar(data.message, {
+          variant: 'error',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error uploading blog', error);
+    }
+  };
+
+  const handleDialogOpenCate = () => {
+    setOpenCate(true);
+  };
+
+  const handleDialogCloseCate = () => {
+    setOpenCate(false);
+  };
+
+  const handleDeleteCate = async () => {
+    handleDialogCloseCate();
+    try {
+      const data = await api.deleteCategory(category);
+      if (data.status === 200) {
+        enqueueSnackbar(data.message, {
+          variant: 'success',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+          },
+        });
+      } else {
+        enqueueSnackbar(data.message, {
+          variant: 'error',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error uploading blog', error);
+    }
+    // Thực hiện xóa ở đây hoặc truyền hàm xóa từ props
   };
 
   const uploadBlog = async () => {
     if (!category || !unit || !file || !title || !content) {
-      enqueueSnackbar("Missing required information", {
+      enqueueSnackbar('Missing required information', {
         variant: 'error',
         anchorOrigin: {
           vertical: 'top',
@@ -157,6 +270,11 @@ const Post = () => {
     try {
       const data = await api.uploadBlog({ file, content, title, unit });
       if (data.status === 200) {
+        setCategory('');
+        setUnit('');
+        setFile(null);
+        setTitle('');
+        setContent('');
         enqueueSnackbar(data.message, {
           variant: 'success',
           anchorOrigin: {
@@ -180,6 +298,7 @@ const Post = () => {
 
   return (
     <>
+      <ButtonsNavigate />
       <h2 className={classes.h2}>Post Blog</h2>
       <Box className={classes.box}>
         <Select
@@ -218,23 +337,61 @@ const Post = () => {
             style: { lineHeight: '2.28' },
           }}
         />
-        <span>
-          <Button
-            className={classes.sendAPI}
-            variant="contained"
-            onClick={uploadBlog}
-          >
-            Upload Blog
-          </Button>
-          <Button
-            className={classes.deleteButton}
-            variant="contained"
-            onClick={handleDeleteButton}
-          >
-            Delete Blog
-          </Button>
-        </span>
+        <Grid container spacing={2} className={classes.gridcontainer}>
+          <Grid item xs={12} sm={3}>
+            <Button
+              className={classes.sendAPI}
+              variant="contained"
+              onClick={uploadBlog}
+            >
+              Upload Blog
+            </Button>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <Button
+              className={classes.deleteBlog}
+              variant="contained"
+              onClick={handleDeleteButton}
+            >
+              Delete Blog
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={3}>
+            <Button
+              className={classes.deleteUnit}
+              variant="contained"
+              onClick={handleDialogOpenUnit}
+            >
+              Delete Unit
+            </Button>
+          </Grid>
+
+          <Grid item xs={12} sm={3}>
+            <Button
+              className={classes.deleteCategory}
+              variant="contained"
+              onClick={handleDialogOpenCate}
+            >
+              Delete Category
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
+      <DialogCustom
+        open={openUnit}
+        handleDialogClose={handleDialogCloseUnit}
+        title="Confirm Delete Unit"
+        content="unit"
+        handleDelete={handleDeleteUnit}
+      />
+      <DialogCustom
+        open={openCate}
+        handleDialogClose={handleDialogCloseCate}
+        title="Confirm Delete Category"
+        content="category"
+        handleDelete={handleDeleteCate}
+      />
     </>
   );
 };

@@ -235,6 +235,7 @@ export default function Header() {
     const fetchUnitsByCategory = async () => {
       try {
         const data = await api.getUnitsAndCategory();
+
         if (data.status === 200) {
           setRepoCategories(data.data.units);
         } else {
@@ -250,7 +251,7 @@ export default function Header() {
     fetchUnitsByCategory();
   }, []);
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading.......</div>;
   }
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [openStates, setOpenStates] = React.useState(
@@ -335,7 +336,7 @@ export default function Header() {
                 )
               )
             ) : (
-              <div>Loading...</div>
+              <div></div>
             )}
           </Box>
         </Toolbar>

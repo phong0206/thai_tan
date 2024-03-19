@@ -1,16 +1,16 @@
+/* eslint-disable import/no-duplicates */
 import React, { ChangeEvent } from 'react';
 import Select from '../components/PostBlog/Select';
 import '../App.css';
-import InputFileUpload from '../components/PostBlog/InputFileUpload';
 import * as api from '../apis/api';
-import { Button } from '@mui/material';
+import { Button, Grid } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import { makeStyles, createStyles } from '@mui/styles';
 import Box from '@mui/material/Box';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
+import _ from 'lodash';
 import ButtonsNavigate from '../components/PostBlog/ButtonsNavigate';
-
 const useStyles = makeStyles((theme: any) =>
   createStyles({
     box: {
@@ -69,15 +69,26 @@ const useStyles = makeStyles((theme: any) =>
         backgroundColor: '#032887 !important',
       },
     },
-    deleteButton: {
+    deleteBlog: {
       fontWeight: 'bold',
-      marginLeft: '10px',
       padding: '6px 16px !important',
       backgroundColor: 'chocolate',
-      [theme.breakpoints.down('sm')]: {
-        marginTop: '10px',
-        marginLeft: '0px',
+      '&:hover': {
+        backgroundColor: 'red !important',
       },
+    },
+    deleteUnit: {
+      fontWeight: 'bold',
+      padding: '6px 16px !important',
+      backgroundColor: 'chocolate',
+      '&:hover': {
+        backgroundColor: 'red !important',
+      },
+    },
+    deleteCategory: {
+      fontWeight: 'bold',
+      padding: '6px 16px !important',
+      backgroundColor: 'chocolate',
       '&:hover': {
         backgroundColor: 'red !important',
       },
@@ -86,24 +97,30 @@ const useStyles = makeStyles((theme: any) =>
       maxHeight: '300px',
       overflowY: 'auto',
     },
+    gridcontainer: {
+      [theme.breakpoints.up('lg')]: {
+        maxWidth: '75%',
+      },
+    },
+    h3: {
+      textAlign: 'center',
+      fontFamily: 'Times New Roman',
+      fontWeight: 'bold',
+      fontSize: '20px',
+      color: 'chocolate',
+    },
   })
 );
 
-const Post = () => {
+const AddUnit = () => {
   const classes = useStyles();
   const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
-  const [isLoading, setIsLoading] = React.useState(false);
-
   const [repoCategories, setRepoCategories] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
   const [category, setCategory] = React.useState('');
-
-  const [repoUnits, setRepoUnits] = React.useState([]);
   const [unit, setUnit] = React.useState('');
-
-  const [repoBlogs, setRepoBlogs] = React.useState([]);
-  const [blog, setBlog] = React.useState('');
-
+  const [typoCategory, setTypoCategory] = React.useState('');
   React.useEffect(() => {
     const fetchUnitsByCategory = async () => {
       try {
@@ -123,54 +140,20 @@ const Post = () => {
     fetchUnitsByCategory();
   }, []);
 
-  if (isLoading) {
-    return <div>Loading....</div>;
-  }
-
-  const handleChangeCategory = async (
-    event: ChangeEvent<{ value: unknown }>
-  ) => {
+  const handleChangeCategory = (event: ChangeEvent<{ value: unknown }>) => {
     const selectedCategoryId = event.target.value as string;
     setCategory(selectedCategoryId);
-
-    try {
-      setIsLoading(true);
-      const data = await api.getUnitsByCategoryId(selectedCategoryId);
-      if (data.status === 200) {
-        setRepoUnits(data.data.units);
-      }
-    } catch (error) {
-      console.error('Error fetching units by category', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const handleChangeUnit = async (event: ChangeEvent<{ value: unknown }>) => {
-    const selectedUnitId = event.target.value as string;
-    setUnit(selectedUnitId);
-
-    try {
-      setIsLoading(true);
-
-      const data = await api.getBlogByUnitId(selectedUnitId);
-
-      if (data.status === 200) {
-        setRepoBlogs(data.data.blogsWithPathImages);
-      }
-    } catch (error) {
-      console.error('Error fetching blogs by category', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-  const handleChangeBlogs = (event: ChangeEvent<{ value: unknown }>) => {
-    const selectedBlogId = event.target.value as string;
-    setBlog(selectedBlogId);
   };
 
-  const handleDeleteButton = async () => {
+  const handleUnitChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setUnit(event.target.value);
+  };
+  const handleCategoryChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setTypoCategory(event.target.value);
+  };
+  const handleCreateCategory = async () => {
     try {
-      const data = await api.deleteBlog(blog);
+      const data = await api.createCategory(typoCategory);
       if (data.status === 200) {
         enqueueSnackbar(data.message, {
           variant: 'success',
@@ -189,17 +172,61 @@ const Post = () => {
         });
       }
     } catch (error) {
-      console.error('Error uploading blog', error);
+      console.error('Error uploading Category', error);
     }
   };
-  const handlePostButton = () => {
-    navigate('/admin/post');
+
+  const handleCreateUnit = async () => {
+    try {
+      const data = await api.createUnit(category, unit);
+      if (data.status === 200) {
+        enqueueSnackbar(data.message, {
+          variant: 'success',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+          },
+        });
+      } else {
+        enqueueSnackbar(data.message, {
+          variant: 'error',
+          anchorOrigin: {
+            vertical: 'top',
+            horizontal: 'right',
+          },
+        });
+      }
+    } catch (error) {
+      console.error('Error uploading Category', error);
+    }
   };
 
   return (
     <>
       <ButtonsNavigate />
-      <h2 className={classes.h2}>Delete Blog</h2>
+      <h2 className={classes.h2}>Create Category And Unit</h2>
+      <h3 className={classes.h3}>Create New Category</h3>
+      <Box className={classes.box}>
+        <TextField
+          value={typoCategory}
+          onChange={handleCategoryChange}
+          label="Category"
+          variant="outlined"
+          fullWidth
+        />
+        <Grid container spacing={2} className={classes.gridcontainer}>
+          <Grid item xs={12} sm={3}>
+            <Button
+              className={classes.sendAPI}
+              variant="contained"
+              onClick={handleCreateCategory}
+            >
+              Create Category
+            </Button>
+          </Grid>
+        </Grid>
+      </Box>
+      <h3 className={classes.h3}>Create New Unit</h3>
       <Box className={classes.box}>
         <Select
           nameSelect="Category"
@@ -209,41 +236,27 @@ const Post = () => {
           displayField="category"
           valueField="_id"
         />
-        <Select
-          nameSelect="Unit"
+        <TextField
           value={unit}
-          handleChange={handleChangeUnit}
-          repo={repoUnits}
-          displayField="unit"
-          valueField="_id"
+          onChange={handleUnitChange}
+          label="Unit"
+          variant="outlined"
+          fullWidth
         />
-        <Select
-          nameSelect="Blog"
-          value={blog}
-          handleChange={handleChangeBlogs}
-          repo={repoBlogs}
-          displayField="title"
-          valueField="_id"
-        />
-        <span>
-          <Button
-            className={classes.sendAPI}
-            variant="contained"
-            onClick={handlePostButton}
-          >
-            Back to Upload Blog
-          </Button>
-          <Button
-            className={classes.deleteButton}
-            variant="contained"
-            onClick={handleDeleteButton}
-          >
-            Delete Blog
-          </Button>
-        </span>
+        <Grid container spacing={2} className={classes.gridcontainer}>
+          <Grid item xs={12} sm={3}>
+            <Button
+              className={classes.sendAPI}
+              variant="contained"
+              onClick={handleCreateUnit}
+            >
+              Upload Unit
+            </Button>
+          </Grid>
+        </Grid>
       </Box>
     </>
   );
 };
 
-export default Post;
+export default AddUnit;

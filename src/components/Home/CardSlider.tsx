@@ -60,7 +60,7 @@ export default function CardSlider(props: Props) {
             color="text.secondary"
             sx={{ fontFamily: 'Times New Roman, Times, serif' }}
           >
-            {props.content ? shortenContent(props.content, 30) : ''}
+            {props.content ? shortenContent(props.content, 20) : ''}
           </Typography>
         </CardContent>
       </CardActionArea>

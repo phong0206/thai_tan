@@ -79,16 +79,13 @@ function CardBlog() {
   }, [unitId, categoryId]);
 
   if (!blogs) {
-    return <div>Loading...</div>;
+    return <div>Loading....</div>;
   }
   return (
     <>
       <Header />
       <Info />
-      <PathBlog
-        unit={blogs.unit ? blogs.unit : {}}
-        category={blogs.category}
-      />
+      <PathBlog unit={blogs.unit ? blogs.unit : {}} category={blogs.category} />
       <div className={classes.container}>
         <ScrollTopButton />
         <ButtonContact />

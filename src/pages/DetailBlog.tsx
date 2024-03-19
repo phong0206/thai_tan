@@ -16,6 +16,7 @@ import { makeStyles, createStyles } from '@mui/styles';
 import ShareButton from '../components/Blog/ShareButton';
 import { useParams } from 'react-router-dom';
 import * as api from '../apis/api';
+import { APP_URL } from '../utils/config';
 
 const useStyles = makeStyles((theme: any) =>
   createStyles({
@@ -50,9 +51,8 @@ function DetailBlog() {
   }, [slug]);
 
   if (!blog) {
-    return <div>Loading...</div>;
+    return <div>Loading....</div>;
   }
-
   return (
     <div className="App">
       <Header />
@@ -68,9 +68,12 @@ function DetailBlog() {
           <Grid item xs={12} sm={8} className={classes.content}>
             <BlogContent blog={blog} />
             <span>
-              <ShareButton url="https://phimss.com/xem-phim/OPID-chang-duong-pon" />{' '}
+              <ShareButton
+                url={`${APP_URL}/blog/${blog.slug}`}
+                title={blog.title}
+              />
             </span>
-            <BlogRelated />
+            <BlogRelated blog = {blog}/>
           </Grid>
         </Grid>
       </Container>

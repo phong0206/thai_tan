@@ -93,7 +93,7 @@ export default function Footer() {
             >
               Kết Nối Với Chúng Tô1
             </Typography>
-            <Link href="https://www.facebook.com/" color="inherit">
+            <Link href="https://www.facebook.com/taixininvest" color="inherit">
               <Facebook />
             </Link>
             <Link
@@ -113,7 +113,6 @@ export default function Footer() {
             {'Copyright © '}
             <Link color="inherit" href="https://your-website.com/">
               Your Website
-
             </Link>{' '}
             {new Date().getFullYear()}
             {'.'}

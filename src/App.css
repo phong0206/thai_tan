@@ -32,45 +32,6 @@
 }
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-/* Định dạng cho tiêu đề */
-h2 {
-  text-align: center;
-  font-family: 'Times New Roman', Times, serif;
-  color: #333;
-  text-transform: uppercase;
-  /* Chuyển đổi văn bản thành chữ in hoa */
-  letter-spacing: 2px;
-  /* Khoảng cách giữa các chữ cái */
-  margin-bottom: 20px;
-  /* Khoảng cách dưới tiêu đề */
-  position: relative;
-  /* Dùng cho việc tạo hiệu ứng */
-}
-
-/* Tạo hiệu ứng gạch chân chỉ ở hai bên của tiêu đề */
-h2::before,
-h2::after {
-  content: '';
-  position: absolute;
-  width: 40%;
-  /* Chiều rộng của gạch chân */
-  height: 3px;
-  /* Độ dày của gạch chân */
-  background-color: #1d5289;
-  /* Màu của gạch chân */
-  bottom: -5px;
-  /* Khoảng cách của gạch chân đến tiêu đề */
-}
-
-h2::before {
-  left: 0;
-  /* Vị trí bắt đầu của gạch chân bên trái */
-}
-
-h2::after {
-  right: 0;
-  /* Vị trí bắt đầu của gạch chân bên phải */
-}
 .rec.rec-arrow {
   border-radius: 40%;
 }

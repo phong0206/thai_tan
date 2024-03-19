@@ -111,7 +111,41 @@ export const getAllCategories = async () => {
   }
 };
 
+export const deleteCategory = async (categoryId: string) => {
+  try {
+    const res = await apiProtected.delete(`/category/delete-category/${categoryId}`);
+    return res.data;
+  } catch (e) {
+    return { error: 'server_error' };
+  }
+};
+
+export const createCategory = async (category: string) => {
+  try {
+    const res = await apiProtected.post(
+      '/category/create-category',
+      {
+        category
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (e) {
+    return { error: 'server_error' };
+  }
+};
+
 //unit 
+export const deleteUnit = async (unitId: string) => {
+  try {
+    const res = await apiProtected.delete(`/unit/delete-unit/${unitId}`);
+    return res.data;
+  } catch (e) {
+    return { error: 'server_error' };
+  }
+};
 
 export const getUnitsAndCategory = async () => {
   try {
@@ -139,9 +173,26 @@ export const getUnitsByCategoryId = async (categoryId: Props) => {
   }
 };
 
+export const createUnit = async (categoryId: string, unit: string) => {
+  try {
+    const res = await apiProtected.post(
+      '/unit/create-unit',
+      {
+        categoryId, unit
+      },
+      {
+        withCredentials: true,
+      }
+    );
+    return res.data;
+  } catch (e) {
+    return { error: 'server_error' };
+  }
+};
+
 //blog
 
-export const uploadBlog = async ({ file, content, title, unit }) => {
+export const uploadBlog = async ({ file, content, title, unit }: any) => {
   const formData = new FormData();
   formData.append('photo', file);
   formData.append('content', content);

@@ -48,9 +48,7 @@ const useStyles = makeStyles((theme: any) =>
 
 const ShareButton: React.FC<ShareButtonProps> = ({ url, title }) => {
   const { enqueueSnackbar } = useSnackbar();
-
   const classes = useStyles();
-
   const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
     url
   )}&t=${encodeURIComponent(title)}`;

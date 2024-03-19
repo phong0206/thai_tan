@@ -27,7 +27,27 @@ const useStyles = makeStyles((theme: any) =>
       },
     },
     h2: {
-      marginBottom: '40px',
+      textAlign: 'center',
+      fontFamily: 'Times New Roman, Times, serif',
+      color: '#333',
+      textTransform: 'uppercase',
+      letterSpacing: '2px',
+      marginBottom: '20px',
+      position: 'relative',
+      '&::before, &::after': {
+        content: '""',
+        position: 'absolute',
+        width: '40%',
+        height: '3px',
+        backgroundColor: '#1d5289',
+        bottom: '-5px',
+      },
+      '&::before': {
+        left: 0,
+      },
+      '&::after': {
+        right: 0,
+      },
     },
   })
 );
@@ -59,7 +79,7 @@ export default function Slider({ categoryName, categoryId }: Props) {
   }, [categoryId]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading....</div>;
   }
 
   const breakPoints = [
