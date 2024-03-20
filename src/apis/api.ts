@@ -192,6 +192,20 @@ export const createUnit = async (categoryId: string, unit: string) => {
 
 //blog
 
+export const queryBlogs = async (title: Props) => {
+
+  try {
+    const res = await api.get(`/blog/auth/get-all-blogs?title=${title}`, {
+      withCredentials: true,
+    });
+    console.log(123234, title);
+    return res.data;
+  } catch (e) {
+    console.error('Error:', e);
+    return { error: 'server_error' };
+  }
+};
+
 export const uploadBlog = async ({ file, content, title, unit }: any) => {
   const formData = new FormData();
   formData.append('photo', file);
