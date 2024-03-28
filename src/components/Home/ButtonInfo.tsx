@@ -1,4 +1,3 @@
-import React from 'react';
 import Button from '@mui/material/Button';
 import { makeStyles, createStyles } from '@mui/styles';
 
@@ -11,7 +10,7 @@ interface Props {
 const useStyles = makeStyles((theme: any) =>
   createStyles({
     button: {
-      position: 'fixed !important',
+      position: 'fixed',
       zIndex: 1000,
       width: 1,
       height: 53,

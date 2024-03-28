@@ -11,7 +11,7 @@ const AuthProvider = React.memo((props: any) => {
   const [user, setUser] = useState(null);
   const [isLoaded, setLoaded] = useState(false);
 
-  const updateToken = async (token: Props['token']) => {
+  const updateToken = async (token: string) => {
     localStorage.setItem('access_token', token);
     api.setAccessToken(token);
     let res = await api.me();

@@ -30,10 +30,17 @@ const useStyles = makeStyles((theme: any) =>
     content: { marginRight: '0px !important' },
   })
 );
+interface BlogData {
+  title: string;
+  slug: string;
+  view: string;
+  date: string;
+  createdAt: string;
+}
 function DetailBlog() {
   const classes = useStyles();
-  let { slug } = useParams();
-  const [blog, setBlog] = React.useState(null);
+  const { slug } = useParams();
+  const [blog, setBlog] = React.useState<BlogData | null>(null);
 
   React.useEffect(() => {
     const fetchBlog = async () => {
@@ -73,7 +80,7 @@ function DetailBlog() {
                 title={blog.title}
               />
             </span>
-            <BlogRelated blog = {blog}/>
+            <BlogRelated blog={blog} />
           </Grid>
         </Grid>
       </Container>

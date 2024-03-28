@@ -15,7 +15,6 @@ import ButtonInfo from '../components/Home/ButtonInfo';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import * as React from 'react';
 import * as api from '../apis/api';
-import SearchComponent from '../components/Home/SearchComponent';
 export function ButtonContact() {
   return (
     <>
@@ -68,7 +67,7 @@ function Home() {
     const fetchUnitsByCategory = async () => {
       try {
         const data = await api.getAllCategories();
-        if (data.status === 200) {
+        if ('status' in data && data.status === 200) {
           setRepoCategories(data.data.data.categories);
         } else {
           setIsLoading(true);

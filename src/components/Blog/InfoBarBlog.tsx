@@ -1,4 +1,3 @@
-import React from 'react';
 import { Box, Grid, Typography } from '@mui/material';
 import { Visibility } from '@mui/icons-material';
 import { makeStyles, createStyles } from '@mui/styles';
@@ -74,7 +73,7 @@ const useStyles = makeStyles((theme: any) =>
   })
 );
 interface Props {
-  blog: { title: string; views: string; date: string };
+  blog: { title: string; view: string; date: string; createdAt: string };
 }
 function formatDate(isoDate: string): string {
   const dateParts: string[] = isoDate.substring(0, 10).split('-');

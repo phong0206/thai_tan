@@ -1,13 +1,16 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 import React, { useContext, useEffect } from 'react';
 import { AuthContext } from './AuthProvider';
-import { useNavigate } from 'react-router-dom';
-
-const ProtectedRoute: React.FC = ({ children }: any) => {
+import { useNavigate, RouteProps } from 'react-router-dom';
+interface ProtectedRouteProps extends Omit<RouteProps, 'children'> {
+  children: React.ReactNode;
+}
+const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   const authContext = useContext(AuthContext);
   if (!authContext) {
     throw new Error('ProtectedRoute needs to be inside an AuthProvider');
   }
-  const { user } = authContext;
+  const { user }: any = authContext;
   const navigate = useNavigate();
 
   useEffect(() => {

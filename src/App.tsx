@@ -1,6 +1,5 @@
 /* eslint-disable no-underscore-dangle */
 import NotFound from './pages/NotFound';
-import Info from './components/Home/Info';
 import React, { Suspense, lazy } from 'react';
 import CssBaseline from '@mui/material/CssBaseline';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -11,7 +10,6 @@ import './App.css';
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import ProtectedRoute from './context/ProtectedRoute';
 import GuestRoute from './context/GuestRoute';
-import * as api from './apis/api';
 import UseMarkdown from './pages/UseMarkdown';
 
 function App() {

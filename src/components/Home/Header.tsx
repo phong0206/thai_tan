@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
@@ -35,7 +36,7 @@ const drawerWidth = 240;
 interface Props {
   nameButton?: string;
   open?: boolean;
-  handleClick?: Function;
+  handleClick?: any;
   units?: Array<any>;
   unitId?: string;
   categoryId?: string;
@@ -341,8 +342,6 @@ export default function Header() {
   const handleNavigateItemSearch = (slug: string) => {
     navigate(`/blog/${slug}`);
   };
-  console.log(111, searchQuery);
-  console.log(222, blogsSearch);
 
   const drawer = (
     <Box className={classes.boxContainerDrawer}>

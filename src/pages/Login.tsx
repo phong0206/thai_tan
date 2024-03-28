@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme: any) =>
 export default function Login() {
   const navigate = useNavigate();
   const classes = useStyles();
-  const { updateToken } = React.useContext(AuthContext);
+  const { updateToken }: any = React.useContext(AuthContext);
   const { enqueueSnackbar } = useSnackbar();
   const formik = useFormik({
     initialValues: {

@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: any) =>
     button: {
       width: 0,
       height: 40,
-      position: 'fixed !important',
+      position: 'fixed',
       bottom: 60,
       right: 30,
       zIndex: 1000,

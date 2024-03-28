@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-curly-brace-presence */
-import * as React from 'react';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
@@ -11,7 +10,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import BusinessIcon from '@mui/icons-material/Business';
 import { makeStyles, createStyles } from '@mui/styles';
 
-const useStyles = makeStyles((theme) =>
+const useStyles = makeStyles((_theme: any) =>
   createStyles({
     header: {
       fontSize: '1.3rem',

@@ -51,7 +51,6 @@ const useStyles = makeStyles((theme: any) =>
     },
   })
 );
-
 interface Props {
   categoryName: string; // Thay đổi type nếu cần
   categoryId: string;
@@ -97,10 +96,10 @@ export default function Slider({ categoryName, categoryId }: Props) {
         enableAutoPlay={true}
         autoPlaySpeed={3000}
         renderPagination={() => (
-          <div style={{ textAlign: 'center' }}>{/* Bỏ thanh số thứ tự */}</div>
+          <div style={{ textAlign: 'center' }}> </div>
         )}
       >
-        {slide.map((slide, index) => (
+        {slide.map((slide: any, index: number) => (
           <CardSlider key={index} {...slide} />
         ))}
       </Carousel>

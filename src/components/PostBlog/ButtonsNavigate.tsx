@@ -1,9 +1,9 @@
 import React from 'react';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Grid } from '@mui/material';
 import { makeStyles, createStyles } from '@mui/styles';
 import { useNavigate } from 'react-router-dom';
 
-const useStyles = makeStyles((theme: any) =>
+const useStyles = makeStyles((_theme: any) =>
   createStyles({
     box: {
       borderColor: '#ccd',

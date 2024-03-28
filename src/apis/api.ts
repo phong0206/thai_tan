@@ -156,7 +156,7 @@ export const getUnitsAndCategory = async () => {
   }
 };
 
-export const getUnitsByCategoryId = async (categoryId: Props) => {
+export const getUnitsByCategoryId = async (categoryId: string) => {
   try {
     const res = await api.post(
       '/unit/get-all-unit-by-categoryid',
@@ -192,13 +192,12 @@ export const createUnit = async (categoryId: string, unit: string) => {
 
 //blog
 
-export const queryBlogs = async (title: Props) => {
+export const queryBlogs = async (searchQuery: any) => {
 
   try {
-    const res = await api.get(`/blog/auth/get-all-blogs?title=${title}`, {
+    const res = await api.get(`/blog/auth/get-all-blogs?title=${searchQuery}`, {
       withCredentials: true,
     });
-    console.log(123234, title);
     return res.data;
   } catch (e) {
     console.error('Error:', e);
@@ -250,7 +249,7 @@ export const getDetailBlog = async (slug: string) => {
 //   }
 // };
 
-export const getBlogByCategoryId = async (categoryId: Props) => {
+export const getBlogByCategoryId = async (categoryId: string) => {
   try {
     const res = await api.get(
       `/blog/auth/get-all-blogs-by-categoryid/${categoryId}`,
@@ -261,7 +260,7 @@ export const getBlogByCategoryId = async (categoryId: Props) => {
   }
 };
 
-export const getBlogByUnitId = async (unitId: Props) => {
+export const getBlogByUnitId = async (unitId: string) => {
   try {
     const res = await api.get(
       `/blog/auth/get-all-blogs-by-unitid/${unitId}`
@@ -281,7 +280,7 @@ export const deleteBlog = async (blogId: string) => {
   }
 };
 
-export const setAccessToken = (token: Props) => {
+export const setAccessToken = (token: string) => {
   apiProtected.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   apiProtectedUploadFile.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 };

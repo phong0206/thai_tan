@@ -1,20 +1,17 @@
 /* eslint-disable @typescript-eslint/ban-types */
-import React from 'react';
 import {
   Button,
-  Grid,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle,
 } from '@mui/material';
 interface Props {
   open: boolean;
-  handleDialogClose: Function;
+  handleDialogClose: any;
   title: string;
   content: string;
-  handleDelete: Function;
+  handleDelete: any;
 }
 const DialogCustom = ({
   open,
@@ -49,7 +46,7 @@ const DialogCustom = ({
           <Button onClick={handleDialogClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={handleDelete} color="primary" autoFocus>
+          <Button onClick={handleDelete} color="primary">
             Confirm
           </Button>
         </DialogActions>

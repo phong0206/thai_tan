@@ -1,5 +1,4 @@
 import { Grid } from '@mui/material';
-import React from 'react';
 import { makeStyles, createStyles } from '@mui/styles';
 
 interface Props {

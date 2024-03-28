@@ -42,6 +42,11 @@ const useStyles = makeStyles((theme: any) =>
     },
   })
 );
+interface BlogData {
+  unit: any;
+  category: any;
+  blogsWithPathImages: any
+}
 function CardBlog() {
   const classes = useStyles();
 
@@ -50,7 +55,7 @@ function CardBlog() {
     categoryId?: string;
   }>();
 
-  const [blogs, setBlogs] = React.useState(null);
+  const [blogs, setBlogs] = React.useState<BlogData | null>(null);
 
   React.useEffect(() => {
     let fetchUrl;
@@ -85,7 +90,10 @@ function CardBlog() {
     <>
       <Header />
       <Info />
-      <PathBlog unit={blogs.unit ? blogs.unit : {}} category={blogs.category} />
+      <PathBlog
+        unit={blogs.unit ? blogs.unit : {}}
+        category={blogs.category}
+      />
       <div className={classes.container}>
         <ScrollTopButton />
         <ButtonContact />

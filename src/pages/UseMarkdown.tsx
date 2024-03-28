@@ -1,6 +1,4 @@
-import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import { Box, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 
 const markdown = `
 Dưới đây là một số kí hiệu cơ bản :

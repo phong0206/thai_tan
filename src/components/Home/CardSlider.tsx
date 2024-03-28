@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import { CardActionArea } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import '../../App.css';
-import { API_URL } from '../../utils/config';
 
 interface Props {
   endpoint: string;

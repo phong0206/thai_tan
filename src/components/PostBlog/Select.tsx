@@ -5,12 +5,9 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import * as api from '../../apis/api';
-
-
 interface Props {
   value: string;
-  handleChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleChange: any;
   repo: Array<any>;
   nameSelect: string;
   displayField: string; // Tên field để hiển thị
