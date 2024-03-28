@@ -208,7 +208,7 @@ export const queryBlogs = async (title: Props) => {
 
 export const uploadBlog = async ({ file, content, title, unit }: any) => {
   const formData = new FormData();
-  formData.append('photo', file);
+  formData.append('image', file);
   formData.append('content', content);
   formData.append('title', title);
   formData.append('unitId', unit);

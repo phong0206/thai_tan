@@ -32,7 +32,7 @@ export default function CardSlider(props: Props) {
     <Card
       sx={{
         borderRadius: '10px',
-        maxWidth: 300,
+        width: 300,
         '&:hover img': {
           transform: 'scale(1.2)', // Scale up 10%
           transition: 'transform 0.3s ease', // Smooth transition

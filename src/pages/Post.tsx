@@ -163,7 +163,7 @@ const Post = () => {
     }
   };
   if (isLoading) {
-    return <div>Loading....ádas</div>;
+    return <div>Loading....</div>;
   }
 
   const handleChangeUnit = (event: ChangeEvent<{ value: unknown }>) => {
